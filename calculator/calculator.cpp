@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include <QDebug>
 
 Calculator::Calculator(int n)
 {
@@ -40,24 +41,53 @@ void Calculator::setValues(QString calLine)
     nums.push_back(num);
 }
 
+void Calculator::cal_mul(int i)
+{
+    nums[i] = nums[i] * nums[i+1];
+    nums.erase(nums.begin()+i+1);
+    opers.erase(opers.begin()+i);
+}
+
+void Calculator::cal_div(int i)
+{
+    if(nums[i+1] == 0) throw div_zero;
+
+    nums[i] = nums[i] / nums[i+1];
+    nums.erase(nums.begin()+i+1);
+    opers.erase(opers.begin()+i);
+}
 
 double Calculator::getResult()
 {
-    double result = nums[0];
-    for(int i=0; i<opers.size(); i++) {
-        if(opers[i] == '+') {
-            m_result += nums[i+1];
-        } else if(opers[i] == '-') {
-            m_result -= nums[i+1];
-        } else if(opers[i] == '*') {
-            m_result *= nums[i+1];
-        } else if(opers[i] == '/') {
-            if(nums[i+1] == 0) throw div_zero;
-            m_result /= nums[i+1];
-        } else if(opers[i] == '%') {
-            // 정수인지 확인하기
-            // 정수가 아닌 경우, 에러 처리 필요
+    int i;
+
+    // 곱셈과 나눗셈 먼저 계산
+    i=0;
+    while(i<opers.size()) {
+        if(opers[i] == mul) {
+            cal_mul(i);
+        } else if(opers[i] == div) {
+            cal_div(i);
+        } else {
+            i++;
         }
+    }
+
+    // 덧셈과 뺄셈 계산
+    double result = nums[0];
+    for(i=0; i<opers.size(); i++) {
+        if(opers[i] == add) {
+            result += nums[i+1];
+        } else if(opers[i] == sub) {
+            result -= nums[i+1];
+        } else {
+            throw others;
+        }
+        // 나머지 계산
+//        } else if(opers[i] == '%') {
+//            // 정수인지 확인하기
+//            // 정수가 아닌 경우, 에러 처리 필요
+//        }
     }
     return result;
 }

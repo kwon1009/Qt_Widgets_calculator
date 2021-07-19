@@ -21,6 +21,9 @@ public:
     void setValues(QString calLine);
     double getResult();
 
+    void cal_mul(int i);
+    void cal_div(int i);
+
     QString getErrorMessage(errors err);
 };
 
