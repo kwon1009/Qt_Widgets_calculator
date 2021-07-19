@@ -5,7 +5,7 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
     setFixedSize(210, 310);
-    m_result = 0;
+    cal = new Calculator(0);
 
     // display
     m_display = new QLineEdit("", this);
@@ -83,15 +83,7 @@ void Widget::display(QString val)
 
 void Widget::display_error(errors err)
 {
-    QString str = "Error: ";
-    switch(err) {
-        case div_zero:
-            str += "It cannot be divided by zero.";
-            break;
-        default:
-            str += "It is Invalid Format.";
-            break;
-    }
+    QString str = cal->getErrorMessage(err);
     m_display->setText(str);
 }
 
@@ -157,7 +149,6 @@ void Widget::slot_input_div()
 {
     display("/");
 }
-// 나머지 계산 추가하기
 void Widget::slot_input_rem()
 {
     display("%");
@@ -166,8 +157,13 @@ void Widget::slot_input_rem()
 void Widget::slot_input_equal()
 {
     QString calLine = m_display->text();
-    qDebug() << "slot_input_equal() : " << calLine;
-    calculate(calLine);
+
+    try {
+        double result = cal->calculate(calLine);
+        m_display->setText(QString("%1").arg(result));
+    }  catch (errors err) {
+        display_error(err);
+    }
 }
 
 
@@ -181,65 +177,6 @@ void Widget::slot_back()
     QString str = m_display->text();
     str.chop(1);
     m_display->setText(str);
-}
-
-
-void Widget::setValues(QString calLine)
-{
-    int i;
-    int s = 0;
-    for(i=0; i<calLine.length(); i++) {
-        // 연산자 구분
-        if(!calLine[i].isNumber() && calLine[i] != '.') {
-            opers.push_back(calLine[i]);
-            double num = calLine.mid(s, (i-s)).toDouble();
-            s = i + 1;
-            nums.push_back(num);
-        }
-    }
-    if(s >= i) throw others;
-
-    double num = calLine.mid(s, (i-s)).toDouble();
-    nums.push_back(num);
-}
-
-double Widget::getResult()
-{
-    double result = nums[0];
-    for(int i=0; i<opers.size(); i++) {
-        if(opers[i] == '+') {
-            m_result += nums[i+1];
-        } else if(opers[i] == '-') {
-            m_result -= nums[i+1];
-        } else if(opers[i] == '*') {
-            m_result *= nums[i+1];
-        } else if(opers[i] == '/') {
-            if(nums[i+1] == 0) throw div_zero;
-            m_result /= nums[i+1];
-        } else if(opers[i] == '%') {
-            // 정수인지 확인하기
-            // 정수가 아닌 경우, 에러 처리 필요
-        }
-    }
-    return result;
-}
-
-void Widget::calculate(QString calLine) {
-    nums.clear();
-    opers.clear();
-
-    try {
-        setValues(calLine);
-
-        if(nums.size() != opers.size()+1) throw others; // 입력한 수식이 정상적인지 확인
-
-        // 계산하기
-        m_result = getResult();
-        m_display->setText(QString("%1").arg(m_result));
-
-    }  catch (errors e) {
-        display_error(e);
-    }
 }
 
 
