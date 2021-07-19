@@ -1,0 +1,3 @@
+# Calculator
+
+Study for Qt.
