@@ -75,93 +75,92 @@ Widget::Widget(QWidget *parent)
 
 }
 
+void Widget::display(QString val)
+{
+    QString str = m_display->text() + val;
+    m_display->setText(str);
+}
+
+void Widget::display_error(errors err)
+{
+    QString str = "Error: ";
+    switch(err) {
+        case div_zero:
+            str += "It cannot be divided by zero.";
+            break;
+        default:
+            str += "It is Invalid Format.";
+            break;
+    }
+    m_display->setText(str);
+}
+
 void Widget::slot_input_0()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(0);
-    qDebug() << m_display->text();
-    m_display->setText(str);
+    display("0");
 }
 void Widget::slot_input_1()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(1);
-    m_display->setText(str);
+    display("1");
 }
 void Widget::slot_input_2()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(2);
-    m_display->setText(str);
+    display("2");
 }
 void Widget::slot_input_3()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(3);
-    m_display->setText(str);
+    display("3");
 }
 void Widget::slot_input_4()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(4);
-    m_display->setText(str);
+    display("4");
 }
 void Widget::slot_input_5()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(5);
-    m_display->setText(str);
+    display("5");
 }
 void Widget::slot_input_6()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(6);
-    m_display->setText(str);
+    display("6");
 }
 void Widget::slot_input_7()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(7);
-    m_display->setText(str);
+    display("7");
 }
 void Widget::slot_input_8()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(8);
-    m_display->setText(str);
+    display("8");
 }
 void Widget::slot_input_9()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(9);
-    m_display->setText(str);
+    display("9");
 }
 
 void Widget::slot_input_dot()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg(".");
-    m_display->setText(str);
+    display(".");
 }
-
 
 void Widget::slot_input_add()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg("+");
-    m_display->setText(str);
+    display("+");
 }
-
 void Widget::slot_input_sub()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg("-");
-    m_display->setText(str);
+    display("-");
 }
-
 void Widget::slot_input_mul()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg("*");
-    m_display->setText(str);
+    display("*");
 }
-
 void Widget::slot_input_div()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg("/");
-    m_display->setText(str);
+    display("/");
 }
-
+// 나머지 계산 추가하기
 void Widget::slot_input_rem()
 {
-    QString str = QString("%1%2").arg(m_display->text()).arg("%");
-    m_display->setText(str);
+    display("%");
 }
 
 void Widget::slot_input_equal()
@@ -185,39 +184,29 @@ void Widget::slot_back()
 }
 
 
-double Widget::calculate(QString calLine) {
+void Widget::setValues(QString calLine)
+{
     int i;
-    int s;
-    QVector<double> nums;
-    QVector<QChar> opers;
-    nums.clear();
-    opers.clear();
-
-    s = 0;
+    int s = 0;
     for(i=0; i<calLine.length(); i++) {
-        // 알파벳을 입력한 경우
-        if(calLine[i].isLetter()) {
-            return 0;
-        }
-
-        // 숫자가 아닌 경우
-        if(!calLine[i].isNumber()) {
-            if(calLine[i] != '.') {
-                opers.push_back(calLine[i]);
-                double num = calLine.mid(s, (i-s)).toDouble();
-                s = i + 1;
-                nums.push_back(num);
-            }
+        // 연산자 구분
+        if(!calLine[i].isNumber() && calLine[i] != '.') {
+            opers.push_back(calLine[i]);
+            double num = calLine.mid(s, (i-s)).toDouble();
+            s = i + 1;
+            nums.push_back(num);
         }
     }
-    if(s < i) {
-        double num = calLine.mid(s, (i-s)).toDouble();
-        nums.push_back(num);
-    }
+    if(s >= i) throw others;
 
-    // 계산하기
-    m_result = nums[0];
-    for(i=0; i<opers.size(); i++) {
+    double num = calLine.mid(s, (i-s)).toDouble();
+    nums.push_back(num);
+}
+
+double Widget::getResult()
+{
+    double result = nums[0];
+    for(int i=0; i<opers.size(); i++) {
         if(opers[i] == '+') {
             m_result += nums[i+1];
         } else if(opers[i] == '-') {
@@ -225,15 +214,32 @@ double Widget::calculate(QString calLine) {
         } else if(opers[i] == '*') {
             m_result *= nums[i+1];
         } else if(opers[i] == '/') {
-            if(nums[i+1] != 0) {
-                m_result /= nums[i+1];
-            }
+            if(nums[i+1] == 0) throw div_zero;
+            m_result /= nums[i+1];
         } else if(opers[i] == '%') {
             // 정수인지 확인하기
             // 정수가 아닌 경우, 에러 처리 필요
         }
     }
-    m_display->setText(QString("%1").arg(m_result));
+    return result;
+}
+
+void Widget::calculate(QString calLine) {
+    nums.clear();
+    opers.clear();
+
+    try {
+        setValues(calLine);
+
+        if(nums.size() != opers.size()+1) throw others; // 입력한 수식이 정상적인지 확인
+
+        // 계산하기
+        m_result = getResult();
+        m_display->setText(QString("%1").arg(m_result));
+
+    }  catch (errors e) {
+        display_error(e);
+    }
 }
 
 

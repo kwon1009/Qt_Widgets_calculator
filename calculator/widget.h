@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QLineEdit>
 
+enum errors { div_zero, others };
+
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -14,6 +16,10 @@ public:
     ~Widget();
 
 private:
+    enum m_opers {
+        add='+', sub='-', mul='*', div='/'
+    };
+
     QPushButton *m_btn_nums[10];
     QPushButton *m_btn_dot;
     QPushButton *m_btn_opers[6];
@@ -22,9 +28,17 @@ private:
     QPushButton *m_btn_back;
 
     QLineEdit *m_display;
+
+    QVector<double> nums;
+    QVector<QChar> opers;
     double m_result;
 
-    double calculate(QString calLine);
+    void calculate(QString calLine);
+    void setValues(QString calLine);
+    double getResult();
+
+    void display(QString val);
+    void display_error(errors err);
 
 private slots:
     // numbers
