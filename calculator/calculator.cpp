@@ -1,9 +1,9 @@
 #include "calculator.h"
-#include <QDebug>
 
 Calculator::Calculator(int n)
 {
-    m_result = 0;
+    m_result = n;
+    m_lastCal = "None";
     nums.clear();
     opers.clear();
 }
@@ -20,6 +20,11 @@ QString Calculator::getErrorMessage(errors err)
             break;
     }
     return str;
+}
+
+QString Calculator::getLastCal()
+{
+    return m_lastCal;
 }
 
 void Calculator::setValues(QString calLine)
@@ -83,17 +88,13 @@ double Calculator::getResult()
         } else {
             throw others;
         }
-        // 나머지 계산
-//        } else if(opers[i] == '%') {
-//            // 정수인지 확인하기
-//            // 정수가 아닌 경우, 에러 처리 필요
-//        }
     }
     return result;
 }
 
 double Calculator::calculate(QString calLine)
 {
+    m_lastCal = calLine;
     nums.clear();
     opers.clear();
 

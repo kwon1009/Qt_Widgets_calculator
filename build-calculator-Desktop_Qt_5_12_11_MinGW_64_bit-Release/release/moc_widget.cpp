@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Widget_t {
     QByteArrayData data[21];
-    char stringdata0[266];
+    char stringdata0[264];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,10 +48,10 @@ QT_MOC_LITERAL(13, 153, 14), // "slot_input_add"
 QT_MOC_LITERAL(14, 168, 14), // "slot_input_sub"
 QT_MOC_LITERAL(15, 183, 14), // "slot_input_mul"
 QT_MOC_LITERAL(16, 198, 14), // "slot_input_div"
-QT_MOC_LITERAL(17, 213, 14), // "slot_input_rem"
-QT_MOC_LITERAL(18, 228, 16), // "slot_input_equal"
-QT_MOC_LITERAL(19, 245, 10), // "slot_clear"
-QT_MOC_LITERAL(20, 256, 9) // "slot_back"
+QT_MOC_LITERAL(17, 213, 16), // "slot_input_equal"
+QT_MOC_LITERAL(18, 230, 10), // "slot_clear"
+QT_MOC_LITERAL(19, 241, 9), // "slot_back"
+QT_MOC_LITERAL(20, 251, 12) // "slot_history"
 
     },
     "Widget\0slot_input_0\0\0slot_input_1\0"
@@ -60,8 +60,8 @@ QT_MOC_LITERAL(20, 256, 9) // "slot_back"
     "slot_input_8\0slot_input_9\0slot_input_dot\0"
     "slot_input_add\0slot_input_sub\0"
     "slot_input_mul\0slot_input_div\0"
-    "slot_input_rem\0slot_input_equal\0"
-    "slot_clear\0slot_back"
+    "slot_input_equal\0slot_clear\0slot_back\0"
+    "slot_history"
 };
 #undef QT_MOC_LITERAL
 
@@ -144,10 +144,10 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 12: _t->slot_input_sub(); break;
         case 13: _t->slot_input_mul(); break;
         case 14: _t->slot_input_div(); break;
-        case 15: _t->slot_input_rem(); break;
-        case 16: _t->slot_input_equal(); break;
-        case 17: _t->slot_clear(); break;
-        case 18: _t->slot_back(); break;
+        case 15: _t->slot_input_equal(); break;
+        case 16: _t->slot_clear(); break;
+        case 17: _t->slot_back(); break;
+        case 18: _t->slot_history(); break;
         default: ;
         }
     }

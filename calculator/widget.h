@@ -19,10 +19,11 @@ private:
 
     QPushButton *m_btn_nums[10];
     QPushButton *m_btn_dot;
-    QPushButton *m_btn_opers[6];
+    QPushButton *m_btn_opers[5];
 
     QPushButton *m_btn_ac;
     QPushButton *m_btn_back;
+    QPushButton *m_btn_history;
 
     QLineEdit *m_display;
 
@@ -48,11 +49,11 @@ private slots:
     void slot_input_sub();
     void slot_input_mul();
     void slot_input_div();
-    void slot_input_rem();
     void slot_input_equal();
 
     // functions
     void slot_clear();
     void slot_back();
+    void slot_history();
 };
 #endif // WIDGET_H

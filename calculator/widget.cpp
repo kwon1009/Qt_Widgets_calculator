@@ -44,8 +44,6 @@ Widget::Widget(QWidget *parent)
 
 
     // operators
-    m_btn_opers[0] = new QPushButton("%", this);
-    m_btn_opers[0]->setGeometry(60, 60, 40, 40);
     m_btn_opers[1] = new QPushButton("/", this);
     m_btn_opers[1]->setGeometry(110, 60, 40, 40);
     m_btn_opers[2] = new QPushButton("*", this);
@@ -54,24 +52,26 @@ Widget::Widget(QWidget *parent)
     m_btn_opers[3]->setGeometry(160, 160, 40, 40);
     m_btn_opers[4] = new QPushButton("-", this);
     m_btn_opers[4]->setGeometry(160, 210, 40, 40);
-    m_btn_opers[5] = new QPushButton("=", this);
-    m_btn_opers[5]->setGeometry(160, 260, 40, 40);
+    m_btn_opers[0] = new QPushButton("=", this);
+    m_btn_opers[0]->setGeometry(160, 260, 40, 40);
 
-    connect(m_btn_opers[0], SIGNAL(pressed()), this, SLOT(slot_input_rem()));
     connect(m_btn_opers[1], SIGNAL(pressed()), this, SLOT(slot_input_div()));
     connect(m_btn_opers[2], SIGNAL(pressed()), this, SLOT(slot_input_mul()));
     connect(m_btn_opers[3], SIGNAL(pressed()), this, SLOT(slot_input_add()));
     connect(m_btn_opers[4], SIGNAL(pressed()), this, SLOT(slot_input_sub()));
-    connect(m_btn_opers[5], SIGNAL(pressed()), this, SLOT(slot_input_equal()));
+    connect(m_btn_opers[0], SIGNAL(pressed()), this, SLOT(slot_input_equal()));
 
     // functions
     m_btn_ac = new QPushButton("AC", this);
     m_btn_ac->setGeometry(10, 60, 40, 40);
     m_btn_back = new QPushButton("Back", this);
     m_btn_back->setGeometry(160, 60, 40, 40);
+    m_btn_history = new QPushButton("H", this);
+    m_btn_history->setGeometry(60, 60, 40, 40);
 
     connect(m_btn_ac, SIGNAL(pressed()), this, SLOT(slot_clear()));
     connect(m_btn_back, SIGNAL(pressed()), this, SLOT(slot_back()));
+    connect(m_btn_history, SIGNAL(pressed()), this, SLOT(slot_history()));
 
 }
 
@@ -149,10 +149,6 @@ void Widget::slot_input_div()
 {
     display("/");
 }
-void Widget::slot_input_rem()
-{
-    display("%");
-}
 
 void Widget::slot_input_equal()
 {
@@ -179,6 +175,11 @@ void Widget::slot_back()
     m_display->setText(str);
 }
 
+void Widget::slot_history()
+{
+    QString str = cal->getLastCal();
+    m_display->setText(str);
+}
 
 Widget::~Widget()
 {

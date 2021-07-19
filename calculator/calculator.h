@@ -13,6 +13,7 @@ class Calculator {
     QVector<double> nums;
     QVector<QChar> opers;
     double m_result;
+    QString m_lastCal;
 
 public:
     Calculator(int n);
@@ -23,6 +24,8 @@ public:
 
     void cal_mul(int i);
     void cal_div(int i);
+
+    QString getLastCal();
 
     QString getErrorMessage(errors err);
 };
