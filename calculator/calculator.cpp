@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include <QDebug>
 
 Calculator::Calculator()
 {
@@ -10,7 +11,7 @@ Calculator::Calculator()
 
 QString Calculator::getErrorMessage(errors err)
 {
-    QString str = "Error: ";
+    QString str = " Error: ";
     switch(err) {
         case alpha:
             str += "Alphabet is not allowed.";
@@ -19,7 +20,7 @@ QString Calculator::getErrorMessage(errors err)
             str += "Blanks cannot be entered.";
         break;
         case div_zero:
-            str += "It cannot be divided by zero.";
+            str += "Can't be divided by zero.";
         break;
         default:
             str += "It is Invalid Format.";
@@ -44,12 +45,15 @@ void Calculator::setValues(QString calLine)
         // 연산자 구분
         if(!calLine[i].isNumber() && calLine[i] != '.') {
             opers.push_back(calLine[i]);
-            double num = calLine.mid(s, (i-s)).toDouble();
+            QString num = calLine.mid(s, (i-s));
+
+            if(num == "") throw others;         // 연산자를 연속으로 입력한 경우
+
             s = i + 1;
-            nums.push_back(num);
+            nums.push_back(num.toDouble());
         }
     }
-    if(s >= i) throw others;    // 연산자로 끝난 경우
+    if(s >= calLine.length()) throw others;    // 연산자로 끝난 경우
 
     double num = calLine.mid(s, (i-s)).toDouble();
     nums.push_back(num);
