@@ -5,30 +5,34 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
     cal = new Calculator();
-    setFixedSize(210, 310);
+    WidgetSize wid_size;
+    BtnSize btn_size;
+
+    setFixedSize(wid_size.width, wid_size.height);
 
     // display
     m_display = new QLineEdit("", this);
-    m_display->setGeometry(10, 10, 190, 40);
+    m_display->setGeometry(10, 10, 190, btn_size.height);
 
     // number buttons
     for(int i=0; i<10; i++) {
         QString m_str = QString("%1").arg(i);
         m_btn_nums[i] = new QPushButton(m_str, this);
     }
-    m_btn_nums[1]->setGeometry(10, 110, 40, 40);
-    m_btn_nums[2]->setGeometry(60, 110, 40, 40);
-    m_btn_nums[3]->setGeometry(110, 110, 40, 40);
-    m_btn_nums[4]->setGeometry(10, 160, 40, 40);
-    m_btn_nums[5]->setGeometry(60, 160, 40, 40);
-    m_btn_nums[6]->setGeometry(110, 160, 40, 40);
-    m_btn_nums[7]->setGeometry(10, 210, 40, 40);
-    m_btn_nums[8]->setGeometry(60, 210, 40, 40);
-    m_btn_nums[9]->setGeometry(110, 210, 40, 40);
-    m_btn_nums[0]->setGeometry(10, 260, 90, 40);
+
+    m_btn_nums[1]->setGeometry(10, 110, btn_size.width, btn_size.height);
+    m_btn_nums[2]->setGeometry(60, 110, btn_size.width, btn_size.height);
+    m_btn_nums[3]->setGeometry(110, 110, btn_size.width, btn_size.height);
+    m_btn_nums[4]->setGeometry(10, 160, btn_size.width, btn_size.height);
+    m_btn_nums[5]->setGeometry(60, 160, btn_size.width, btn_size.height);
+    m_btn_nums[6]->setGeometry(110, 160, btn_size.width, btn_size.height);
+    m_btn_nums[7]->setGeometry(10, 210, btn_size.width, btn_size.height);
+    m_btn_nums[8]->setGeometry(60, 210, btn_size.width, btn_size.height);
+    m_btn_nums[9]->setGeometry(110, 210, btn_size.width, btn_size.height);
+    m_btn_nums[0]->setGeometry(10, 260, btn_size.width*2+10, btn_size.height);
 
     m_btn_dot = new QPushButton(".", this);
-    m_btn_dot->setGeometry(110, 260, 40, 40);
+    m_btn_dot->setGeometry(110, 260, btn_size.width, btn_size.height);
 
     connect(m_btn_nums[0], SIGNAL(pressed()), this, SLOT(slot_input_0()));
     connect(m_btn_nums[1], SIGNAL(pressed()), this, SLOT(slot_input_1()));
@@ -45,15 +49,16 @@ Widget::Widget(QWidget *parent)
 
     // operators
     m_btn_opers[1] = new QPushButton("/", this);
-    m_btn_opers[1]->setGeometry(110, 60, 40, 40);
     m_btn_opers[2] = new QPushButton("*", this);
-    m_btn_opers[2]->setGeometry(160, 110, 40, 40);
     m_btn_opers[3] = new QPushButton("+", this);
-    m_btn_opers[3]->setGeometry(160, 160, 40, 40);
     m_btn_opers[4] = new QPushButton("-", this);
-    m_btn_opers[4]->setGeometry(160, 210, 40, 40);
     m_btn_opers[0] = new QPushButton("=", this);
-    m_btn_opers[0]->setGeometry(160, 260, 40, 40);
+
+    m_btn_opers[1]->setGeometry(110, 60, btn_size.width, btn_size.height);
+    m_btn_opers[2]->setGeometry(160, 110, btn_size.width, btn_size.height);
+    m_btn_opers[3]->setGeometry(160, 160, btn_size.width, btn_size.height);
+    m_btn_opers[4]->setGeometry(160, 210, btn_size.width, btn_size.height);
+    m_btn_opers[0]->setGeometry(160, 260, btn_size.width, btn_size.height);
 
     connect(m_btn_opers[1], SIGNAL(pressed()), this, SLOT(slot_input_div()));
     connect(m_btn_opers[2], SIGNAL(pressed()), this, SLOT(slot_input_mul()));
@@ -61,13 +66,15 @@ Widget::Widget(QWidget *parent)
     connect(m_btn_opers[4], SIGNAL(pressed()), this, SLOT(slot_input_sub()));
     connect(m_btn_opers[0], SIGNAL(pressed()), this, SLOT(slot_input_equal()));
 
+
     // functions
     m_btn_ac = new QPushButton("AC", this);
-    m_btn_ac->setGeometry(10, 60, 40, 40);
     m_btn_back = new QPushButton("Back", this);
-    m_btn_back->setGeometry(160, 60, 40, 40);
     m_btn_history = new QPushButton("H", this);
-    m_btn_history->setGeometry(60, 60, 40, 40);
+
+    m_btn_ac->setGeometry(10, 60, btn_size.width, btn_size.height);
+    m_btn_back->setGeometry(160, 60, btn_size.width, btn_size.height);
+    m_btn_history->setGeometry(60, 60, btn_size.width, btn_size.height);
 
     connect(m_btn_ac, SIGNAL(pressed()), this, SLOT(slot_clear()));
     connect(m_btn_back, SIGNAL(pressed()), this, SLOT(slot_back()));
@@ -157,6 +164,7 @@ void Widget::slot_input_equal()
     try {
         double result = cal->calculate(calLine);
         m_display->setText(QString("%1").arg(result));
+
     }  catch (errors err) {
         display_error(err);
     }

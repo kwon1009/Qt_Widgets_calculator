@@ -7,7 +7,7 @@ enum errors { alpha, blank, div_zero, others };
 
 class Calculator {
     enum m_opers {
-        add='+', sub='-', mul='*', div='/'
+        add='+', sub='-', mul='*', div='/', equal='='
     };
 
     QVector<double> nums;

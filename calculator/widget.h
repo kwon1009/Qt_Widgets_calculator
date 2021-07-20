@@ -17,6 +17,17 @@ public:
 private:
     Calculator *cal;
 
+    struct WidgetSize {
+        int width = 210;
+        int height = 310;
+        int padding = 10;
+    };
+
+    struct BtnSize {
+        int width = 40;
+        int height = 40;
+    };
+
     QPushButton *m_btn_nums[10];
     QPushButton *m_btn_dot;
     QPushButton *m_btn_opers[5];
