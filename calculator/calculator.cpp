@@ -55,18 +55,8 @@ void Calculator::setValues(QString calLine)
     nums.push_back(num);
 }
 
-void Calculator::cal_mul(int i)
+void Calculator::resetValue(int i)
 {
-    nums[i] = nums[i] * nums[i+1];
-    nums.erase(nums.begin()+i+1);
-    opers.erase(opers.begin()+i);
-}
-
-void Calculator::cal_div(int i)
-{
-    if(nums[i+1] == 0) throw div_zero;
-
-    nums[i] = nums[i] / nums[i+1];
     nums.erase(nums.begin()+i+1);
     opers.erase(opers.begin()+i);
 }
@@ -79,26 +69,34 @@ double Calculator::getResult()
     i=0;
     while(i<opers.size()) {
         if(opers[i] == mul) {
-            cal_mul(i);
+            nums[i] = nums[i] * nums[i+1];
+            resetValue(i);
+
         } else if(opers[i] == div) {
-            cal_div(i);
+            if(nums[i+1] == 0) throw div_zero;  // 0으로 나누는 경우
+            nums[i] = nums[i] / nums[i+1];
+            resetValue(i);
+
         } else {
             i++;
         }
     }
 
     // 덧셈과 뺄셈 계산
-    double result = nums[0];
     for(i=0; i<opers.size(); i++) {
         if(opers[i] == add) {
-            result += nums[i+1];
+            nums[i] = nums[i] + nums[i+1];
+            resetValue(i);
+
         } else if(opers[i] == sub) {
-            result -= nums[i+1];
+            nums[i] = nums[i] - nums[i+1];
+            resetValue(i);
+
         } else {
             throw others;
         }
     }
-    return result;
+    return nums[0];
 }
 
 double Calculator::calculate(QString calLine)
