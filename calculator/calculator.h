@@ -3,7 +3,7 @@
 
 #include <QVector>
 
-enum errors { div_zero, others };
+enum errors { alpha, blank, div_zero, others };
 
 class Calculator {
     enum m_opers {
@@ -15,18 +15,17 @@ class Calculator {
     double m_result;
     QString m_lastCal;
 
-public:
-    Calculator(int n);
-
-    double calculate(QString calLine);
     void setValues(QString calLine);
     double getResult();
 
     void cal_mul(int i);
     void cal_div(int i);
 
-    QString getLastCal();
+public:
+    Calculator();
 
+    double calculate(QString calLine);
+    QString getLastCal();
     QString getErrorMessage(errors err);
 };
 

@@ -4,8 +4,8 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
+    cal = new Calculator();
     setFixedSize(210, 310);
-    cal = new Calculator(0);
 
     // display
     m_display = new QLineEdit("", this);
