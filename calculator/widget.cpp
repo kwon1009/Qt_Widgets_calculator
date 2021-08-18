@@ -20,15 +20,18 @@ Widget::Widget(QWidget *parent)
         m_btn_nums[i] = new QPushButton(m_str, this);
     }
 
-    m_btn_nums[1]->setGeometry(10, 110, btn_size.width, btn_size.height);
-    m_btn_nums[2]->setGeometry(60, 110, btn_size.width, btn_size.height);
-    m_btn_nums[3]->setGeometry(110, 110, btn_size.width, btn_size.height);
-    m_btn_nums[4]->setGeometry(10, 160, btn_size.width, btn_size.height);
-    m_btn_nums[5]->setGeometry(60, 160, btn_size.width, btn_size.height);
-    m_btn_nums[6]->setGeometry(110, 160, btn_size.width, btn_size.height);
-    m_btn_nums[7]->setGeometry(10, 210, btn_size.width, btn_size.height);
-    m_btn_nums[8]->setGeometry(60, 210, btn_size.width, btn_size.height);
-    m_btn_nums[9]->setGeometry(110, 210, btn_size.width, btn_size.height);
+    int n = 1;
+    int y = 110;
+    for(int i=0; i<3; i++) {
+        int x = 10;
+        for(int j=0; j<3; j++) {
+            m_btn_nums[n]->setGeometry(x, y, btn_size.width, btn_size.height);
+            x += 50;
+            n++;
+            qDebug() << n << x << y;
+        }
+        y += 50;
+    }
     m_btn_nums[0]->setGeometry(10, 260, btn_size.width*2+10, btn_size.height);
 
     m_btn_dot = new QPushButton(".", this);
@@ -48,11 +51,9 @@ Widget::Widget(QWidget *parent)
 
 
     // operators
-    m_btn_opers[1] = new QPushButton("/", this);
-    m_btn_opers[2] = new QPushButton("*", this);
-    m_btn_opers[3] = new QPushButton("+", this);
-    m_btn_opers[4] = new QPushButton("-", this);
-    m_btn_opers[0] = new QPushButton("=", this);
+    for(int i=0; i<5; i++) {
+        m_btn_opers[i] = new QPushButton(OPERS[i], this);
+    }
 
     m_btn_opers[1]->setGeometry(110, 60, btn_size.width, btn_size.height);
     m_btn_opers[2]->setGeometry(160, 110, btn_size.width, btn_size.height);

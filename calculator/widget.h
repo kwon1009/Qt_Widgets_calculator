@@ -6,6 +6,8 @@
 #include <QLineEdit>
 #include "calculator.h"
 
+const QStringList OPERS = {"=", "/", "*", "+", "-"};
+
 class Widget : public QWidget
 {
     Q_OBJECT
